@@ -46,6 +46,7 @@ function updateUserInfo(req, res) {
     { name, about },
     {
       new: true,
+      runValidators: true,
     },
   )
     .then((user) => res.send({ data: user }))
@@ -72,6 +73,7 @@ function updateUserAvatar(req, res) {
     { avatar },
     {
       new: true,
+      runValidators: true,
     },
   )
     .then((user) => res.send({ data: user }))
