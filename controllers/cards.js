@@ -51,7 +51,14 @@ function likeCard(req, res) {
       }
       res.send({ data: like });
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Передан некорректный Id' });
+
+        return;
+      }
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 }
 
 function dislikeCard(req, res) {
