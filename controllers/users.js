@@ -8,10 +8,15 @@ function findAllUsers(req, res) {
 
 function findUserById(req, res) {
   User.findById(req.params.id)
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Пользователь не найден' });
+      }
+      res.send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(400).send({ message: 'Передан некорретный Id' });
 
         return;
       }
