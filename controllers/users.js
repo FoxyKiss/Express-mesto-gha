@@ -1,6 +1,5 @@
 const User = require('../models/user');
 
-
 function findAllUsers(req, res) {
   User.find({})
     .then((users) => res.send({ data: users }))
@@ -11,12 +10,12 @@ function findUserById(req, res) {
   User.findById(req.params.id)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if(err.name === 'CastError') {
-        res.status(404).send({message: 'Пользователь не найден'})
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Пользователь не найден' });
 
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' })
+      res.status(500).send({ message: 'Произошла ошибка' });
     });
 }
 
@@ -26,13 +25,13 @@ function createUser(req, res) {
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if(err.name === 'ValidationError') {
-        res.status(400).send({message: 'Введены некорретные данные'})
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Введены некорретные данные' });
 
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' })
-    });;
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 }
 
 function updateUserInfo(req, res) {
@@ -46,18 +45,18 @@ function updateUserInfo(req, res) {
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if(err.name === 'ValidationError') {
-        res.status(400).send({message: 'Введены некорретные данные'})
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Введены некорретные данные' });
 
         return;
       }
 
-      if(err.name === 'CastError') {
-        res.status(404).send({message: 'Пользователь не найден'})
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Пользователь не найден' });
       }
 
-      res.status(500).send({ message: 'Произошла ошибка' })
-    });;
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 }
 
 function updateUserAvatar(req, res) {
@@ -72,18 +71,18 @@ function updateUserAvatar(req, res) {
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if(err.name === 'ValidationError') {
-        res.status(400).send({message: 'Введены некорретные данные'})
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Введены некорретные данные' });
 
         return;
       }
 
-      if(err.name === 'CastError') {
-        res.status(404).send({message: 'Пользователь не найден'})
+      if (err.name === 'CastError') {
+        res.status(404).send({ message: 'Пользователь не найден' });
       }
 
-      res.status(500).send({ message: 'Произошла ошибка' })
-    });;
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 }
 
 module.exports = {

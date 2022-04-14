@@ -8,30 +8,30 @@ function findAllCards(req, res) {
 
 function createCard(req, res) {
   const { name, link } = req.body;
-  const owner = req.user._id
+  const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if(err.name === 'ValidationError') {
-        res.status(400).send({message: 'Введены некорретные данные'})
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Введены некорретные данные' });
 
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' })
-    });;
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 }
 
 function deleteCard(req, res) {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if(err.name === 'CastError') {
-        res.status(400).send({message: 'Карточка не найдена'})
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Карточка не найдена' });
 
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' })
-    });;
+      res.status(500).send({ message: 'Произошла ошибка' });
+    });
 }
 
 function likeCard(req, res) {
