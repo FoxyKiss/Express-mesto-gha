@@ -37,9 +37,8 @@ function createUser(req, res) {
 
 function updateUserInfo(req, res) {
   const { name, about } = req.body;
-
   User.findByIdAndUpdate(
-    req.params.id,
+    req.user._id,
     { name, about },
     {
       new: true,
@@ -52,6 +51,11 @@ function updateUserInfo(req, res) {
 
         return;
       }
+
+      if(err.name === 'CastError') {
+        res.status(404).send({message: 'Пользователь не найден'})
+      }
+
       res.status(500).send({ message: 'Произошла ошибка' })
     });;
 }
@@ -73,6 +77,11 @@ function updateUserAvatar(req, res) {
 
         return;
       }
+
+      if(err.name === 'CastError') {
+        res.status(404).send({message: 'Пользователь не найден'})
+      }
+
       res.status(500).send({ message: 'Произошла ошибка' })
     });;
 }
