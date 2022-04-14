@@ -1,8 +1,6 @@
 const User = require('../models/user');
 
 
-const ERROR_CODE = 400;
-
 function findAllUsers(req, res) {
   User.find({})
     .then((users) => res.send({ data: users }))
@@ -10,7 +8,7 @@ function findAllUsers(req, res) {
 }
 
 function findUserById(req, res) {
-  User.findById(req.params._id)
+  User.findById(req.params.id)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if(err.name === 'CastError') {
@@ -41,7 +39,7 @@ function updateUserInfo(req, res) {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
-    req.params._id,
+    req.params.id,
     { name, about },
     {
       new: true,
@@ -62,7 +60,7 @@ function updateUserAvatar(req, res) {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
-    req.params._id,
+    req.params.id,
     { avatar },
     {
       new: true,
