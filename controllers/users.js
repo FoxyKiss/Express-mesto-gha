@@ -58,7 +58,7 @@ function updateUserInfo(req, res) {
       }
 
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(400).send({ message: 'Передан некорретный Id' });
       }
 
       res.status(500).send({ message: 'Произошла ошибка' });
@@ -69,7 +69,7 @@ function updateUserAvatar(req, res) {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
-    req.params.id,
+    req.user._id,
     { avatar },
     {
       new: true,
