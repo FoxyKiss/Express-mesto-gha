@@ -11,14 +11,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 // ? Мидлвэр для добавления id пользователя
 app.use((req, res, next) => {
   req.user = {
-    _id: '6256d182dc74c95a38fb82b0',
+    _id: '6257ccf96322c6fc565f10de',
   };
 
   next();
 });
-module.exports.createCard = (req, res) => {
-  console.log(req.user._id); // _id станет доступен
-};
 
 // ? Работа с роутами
 app.use(bodyParser.json());
