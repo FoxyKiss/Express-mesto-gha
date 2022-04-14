@@ -85,7 +85,7 @@ function updateUserAvatar(req, res) {
       }
 
       if (err.name === 'CastError') {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(400).send({ message: 'Передан некорретный Id' });
       }
 
       res.status(500).send({ message: 'Произошла ошибка' });
