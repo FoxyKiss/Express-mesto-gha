@@ -23,10 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
-// ? Запуск сервера
-app.listen(PORT, () => {
+app.use((req, res) => {
+  res.status(404).send({ message: 'Адреса по вашему запросу не существует' });
 });
 
-app.get('/', (req, res) => {
-  res.send('Есть коннект');
+// ? Запуск сервера
+app.listen(PORT, () => {
 });
