@@ -14,9 +14,40 @@ function findUserById(req, res) {
 
 function createUser(req, res) {
   const { name, about, avatar } = req.body;
+
   User.create({ name, about, avatar })
-    .then((users) => res.send({ data: users }))
+    .then((user) => res.send({ data: user }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 }
 
-module.exports = { findAllUsers, findUserById, createUser };
+function updateUserInfo(req, res) {
+  const { name, about } = req.body;
+
+  User.findByIdAndUpdate(
+    req.params.id,
+    { name, about },
+    {
+      new: true,
+    },
+  )
+    .then((user) => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+}
+
+function updateUserAvatar(req, res) {
+  const { avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    req.params.id,
+    { avatar },
+    {
+      new: true,
+    },
+  )
+    .then((user) => res.send({ data: user }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+}
+
+module.exports = {
+  findAllUsers, findUserById, createUser, updateUserInfo, updateUserAvatar,
+};
