@@ -11,19 +11,33 @@ function createCard(req, res) {
 
   Card.create({ name, link })
     .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if(err.name === 'ValidationError') {
+        res.status(400).send({message: 'Введены некорретные данные'})
+
+        return;
+      }
+      res.status(500).send({ message: 'Произошла ошибка' })
+    });;
 }
 
 function deleteCard(req, res) {
   Card.findByIdAndRemove(req.params.id)
     .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if(err.name === 'CastError') {
+        res.status(400).send({message: 'Карточка не найдена'})
+
+        return;
+      }
+      res.status(500).send({ message: 'Произошла ошибка' })
+    });;
 }
 
 function likeCard(req, res) {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: req.user._id } },
     { new: true },
   )
     .then((like) => res.send({ data: like }))
@@ -33,7 +47,7 @@ function likeCard(req, res) {
 function dislikeCard(req, res) {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: req.user._id } }, // убрать _id из массива
+    { $pull: { likes: req.user._id } },
     { new: true },
   )
     .then((like) => res.send({ data: like }))
