@@ -8,8 +8,8 @@ function findAllCards(req, res) {
 
 function createCard(req, res) {
   const { name, link } = req.body;
-
-  Card.create({ name, link })
+  const owner = req.user._id
+  Card.create({ name, link, owner })
     .then((cards) => res.send({ data: cards }))
     .catch((err) => {
       if(err.name === 'ValidationError') {
