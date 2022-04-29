@@ -30,19 +30,20 @@ function createUser(req, res) {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  const { _id } = req.user;
+  if (!email || !password) return res.status(400).send({ message: 'Email или пароль не могут быть пустыми' });
 
   bcrypt.hash(password, 10)
     .then((hash) => {
       User.create({
-        name, about, avatar, email, password: hash, _id,
+        name, about, avatar, email, password: hash,
       })
-        .then((user) => res.send({ data: user.email, _id }))
+        .then((user) => res.send({ data: user.email }))
         .catch((err) => {
+          if (err.code === 11000) {
+            return res.status(409).send({ message: 'Пользователь с таким email уже существует' });
+          }
           if (err.name === 'ValidationError') {
-            res.status(400).send({ message: 'Введены некорретные данные' });
-
-            return;
+            return res.status(400).send({ message: 'Введены некорретные данные' });
           }
           res.status(500).send({ message: 'Произошла ошибка' });
         });
