@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 const auth = require('./midlewares/auth');
+
 // ? Создать Порт и Express сервер
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -22,6 +24,7 @@ app.use((req, res) => {
   res.status(404).send({ message: 'Адреса по вашему запросу не существует' });
 });
 
+app.use(errors());
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
