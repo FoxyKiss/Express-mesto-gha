@@ -1,45 +1,43 @@
 const Card = require('../models/card');
+const { NotFoundError } = require('../errors/NotFoundError');
+const { BadRequestError } = require('../errors/BadRequestError');
 
-function findAllCards(req, res) {
+function findAllCards(req, res, next) {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(next);
 }
 
-function createCard(req, res) {
+function createCard(req, res, next) {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Введены некорретные данные' });
-
-        return;
+        return next(new BadRequestError('Введены некорретные данные'));
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 
-function deleteCard(req, res) {
+function deleteCard(req, res, next) {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: 'Карточка  не найдена' });
+        throw new NotFoundError('Карточка  не найдена');
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Передан некорректный Id' });
-
-        return;
+        return next(new BadRequestError('Передан некорректный Id'));
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 
-function likeCard(req, res) {
+function likeCard(req, res, next) {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
@@ -47,21 +45,19 @@ function likeCard(req, res) {
   )
     .then((like) => {
       if (!like) {
-        res.status(404).send({ message: 'Переданный id не найден' });
+        throw new NotFoundError('Переданный id не найден');
       }
       res.send({ data: like });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Передан некорректный Id' });
-
-        return;
+        return next(new BadRequestError('Передан некорректный Id'));
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 
-function dislikeCard(req, res) {
+function dislikeCard(req, res, next) {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
@@ -69,17 +65,15 @@ function dislikeCard(req, res) {
   )
     .then((like) => {
       if (!like) {
-        res.status(404).send({ message: 'Переданный id не найден' });
+        throw new NotFoundError('Переданный id не найден');
       }
       res.send({ data: like });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Передан некорретный Id' });
-
-        return;
+        return next(new BadRequestError('Передан некорректный Id'));
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 

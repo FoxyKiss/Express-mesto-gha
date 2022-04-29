@@ -1,36 +1,39 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { NotFoundError } = require('../errors/NotFoundError');
+const { BadRequestError } = require('../errors/BadRequestError');
+const { UnauthorizedError } = require('../errors/UnauthorizedError');
+const { ConflictError } = require('../errors/ConflictError');
 
-function findAllUsers(req, res) {
+function findAllUsers(req, res, next) {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(next);
 }
 
-function findUserById(req, res) {
+function findUserById(req, res, next) {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        throw new NotFoundError('Пользователь не найден');
       }
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Передан некорретный Id' });
-
+        next(new BadRequestError('Передан некорретный Id'));
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 
-function createUser(req, res) {
+function createUser(req, res, next) {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  if (!email || !password) return res.status(400).send({ message: 'Email или пароль не могут быть пустыми' });
+  if (!email || !password) throw new BadRequestError('Email или пароль не могут быть пустыми');
 
   bcrypt.hash(password, 10)
     .then((hash) => {
@@ -40,17 +43,17 @@ function createUser(req, res) {
         .then((user) => res.send({ data: user.email }))
         .catch((err) => {
           if (err.code === 11000) {
-            return res.status(409).send({ message: 'Пользователь с таким email уже существует' });
+            return next(new ConflictError('Пользователь с таким email уже существует'));
           }
           if (err.name === 'ValidationError') {
-            return res.status(400).send({ message: 'Введены некорретные данные' });
+            return next(new BadRequestError('Введены некорретные данные'));
           }
-          res.status(500).send({ message: 'Произошла ошибка' });
+          next(err);
         });
     });
 }
 
-function updateUserInfo(req, res) {
+function updateUserInfo(req, res, next) {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -63,20 +66,18 @@ function updateUserInfo(req, res) {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Введены некорретные данные' });
-
-        return;
+        return next(new BadRequestError('Введены некорретные данные'));
       }
 
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Передан некорретный Id' });
+        return next(new BadRequestError('Передан некорретный Id'));
       }
 
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 
-function updateUserAvatar(req, res) {
+function updateUserAvatar(req, res, next) {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
@@ -90,20 +91,18 @@ function updateUserAvatar(req, res) {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Введены некорретные данные' });
-
-        return;
+        return next(new BadRequestError('Введены некорретные данные'));
       }
 
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Передан некорретный Id' });
+        return next(new BadRequestError('Передан некорретный Id'));
       }
 
-      res.status(500).send({ message: 'Произошла ошибка' });
+      next(err);
     });
 }
 
-function login(req, res) {
+function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -117,9 +116,7 @@ function login(req, res) {
       res.send({ token });
     })
     .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
+      next(new UnauthorizedError(err.message));
     });
 }
 
