@@ -72,8 +72,8 @@ function createUser(req, res, next) {
             return next(new BadRequestError('Введены некорретные данные'));
           }
           next(err);
-        }).catch(next);
-    });
+        });
+    }).catch(next);
 }
 
 function updateUserInfo(req, res, next) {

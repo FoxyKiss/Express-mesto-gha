@@ -26,7 +26,7 @@ function deleteCard(req, res, next) {
   const { cardId } = req.params;
 
   Card.findById(cardId)
-    .onFail(() => {
+    .orFail(() => {
       throw new NotFoundError('Карточка  не найдена');
     })
     .then((card) => {
@@ -37,21 +37,7 @@ function deleteCard(req, res, next) {
         .then(() => {
           res.send({ message: 'Карточка удалена' });
         });
-    });
-
-  Card.findById(req.params.cardId)
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка  не найдена');
-      }
-      res.send({ data: card });
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequestError('Передан некорректный Id'));
-      }
-      next(err);
-    });
+    }).catch(next);
 }
 
 function likeCard(req, res, next) {
