@@ -17,12 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(require('./routes/auth'));
 
-app.use((req, res, next) => {
-  next(new NotFoundError('Адреса по вашему запросу не существует'));
-});
 app.use(auth);
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
+
+app.use((req, res, next) => {
+  next(new NotFoundError('Адреса по вашему запросу не существует'));
+});
 
 app.use(errors());
 app.use((err, req, res, next) => {

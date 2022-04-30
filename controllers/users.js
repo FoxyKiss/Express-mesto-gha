@@ -59,7 +59,11 @@ function createUser(req, res, next) {
       User.create({
         name, about, avatar, email, password: hash,
       })
-        .then((user) => res.send({ data: user.email }))
+        .then(() => res.status(200).send({
+          data: {
+            name, about, avatar, email,
+          },
+        }))
         .catch((err) => {
           if (err.code === 11000) {
             return next(new ConflictError('Пользователь с таким email уже существует'));
@@ -68,7 +72,7 @@ function createUser(req, res, next) {
             return next(new BadRequestError('Введены некорретные данные'));
           }
           next(err);
-        });
+        }).catch(next);
     });
 }
 
