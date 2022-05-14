@@ -1,28 +1,50 @@
-[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/FoxyKiss/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
+**<h2>🚀 Stack:</h2>**
 
 
+![JavaScript](https://img.shields.io/badge/-JavaScript-000?&logo=javascript)
+![Express.js](https://img.shields.io/badge/-Express.js-000?&logo=Express)
+![Node.js](https://img.shields.io/badge/-Node.js-000?&logo=Node.js)
 
-## Настройка бейджей статуса тестов
-Перед началом работы над проектом рекомендуется исправить бейджи, отражающие статус прохождения тестов.
-Для этого замените разметку бейджей на следующий фрагмент, подставив вместо `${имя_пользователя}` и `${имя_репозитория}` соответствующие значения.
+ **<h1 align="center"><a href="#">Express server Mesto 💻</a></h1>**
 
-```
-[![Tests for sprint 13](https://github.com/${FoxyKiss}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/${FoxyKiss}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml)
+**<h2>✒️ Описание:</h2>**
 
-[![Tests for sprint 14](https://github.com/${FoxyKiss}/${ express-mesto-gha}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${FoxyKiss}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml)
-```
+* **Бэкенд сервер на Express.js для проекта <a href="https://github.com/FoxyKiss/React-mesto-auth">Mesto</a>**
 
+---
 
-## Директории
+**<h2>🔧 Технологии:</h2>**
 
-`/routes` — папка с файлами роутера
-`/controllers` — папка с файлами контроллеров пользователя и карточки
-`/models` — папка с файлами описания схем пользователя и карточки
+* **JavaScript**
+* **Express.js**
+* **Node.js**
 
-Остальные директории вспомогательные, создаются при необходимости разработчиком
+---
 
-## Запуск проекта
+**<h2>📘 Инструкция и системные требования:</h2>**
+  <h3 style="margin-left: 40px;">Для запуска проекта выполните следующие действия</h3>
 
-`npm run start` — запускает сервер
-`npm run dev` — запускает сервер с hot-reload
+-     Клонируйте проект на свой компьтер (git clone)
+-     Установите на ПК Node.js
+-     В директории проекта установите зависимости проекта (npm install)
+-     Для запуска сервера  введите в консоль команду (npm run start)
+-     Для запуска сервера  с hot reload введите в консоль команду (npm run dev)
+
+ <h3 style="margin-left: 40px;">Директории</h3>
+
+- `/routes` — папка с файлами роутера
+- `/controllers` — папка с файлами контроллеров пользователя и карточки
+- `/models` — папка с файлами описания схем пользователя и карточки
+---
+
+**<h2>⚡ Планы по доработке проекта:</h2>**
+
+* **Заменить then на async/await**
+* **Использовать Cookies для хранения JWT токена**
+
+---
+
+**<h2 align="center" style="color:#fcba03">Arseniy FoxyKiss Kravtsov.</h2>**
+**<h2 align="center">Aspring Web-Developer</h2>**
+**<h2 align="center">[Yandex Practicum](https://praktikum.yandex.ru/)</h2>**
